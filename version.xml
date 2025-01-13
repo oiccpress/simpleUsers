@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE version SYSTEM "../../../lib/pkp/dtd/pluginVersion.dtd">
+
+<!--
+  * version.xml
+  *
+  * Copyright (c) 2025 Invisible Dragon Ltd
+  *
+  * Plugin version information.
+  -->
+<version>
+	<application>simpleusers</application>
+	<type>plugins.importexport</type>
+	<release>1</release>
+	<date>2025-01-12</date>
+	<lazy-load>1</lazy-load>
+	<class>SimpleUsersPlugin</class>
+</version>
+
