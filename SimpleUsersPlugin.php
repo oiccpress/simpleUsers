@@ -8,7 +8,7 @@
  *
  */
 
-namespace APP\plugins\importexport\simpleUsers;
+namespace APP\plugins\importexport\simpleusers;
 
 use APP\core\Application;
 use APP\facades\Repo;
@@ -237,6 +237,7 @@ use PKP\userGroup\UserGroup;
                                     $val = $data[$valP[1]];
                                     break;
                             }
+                            $val = str_replace('&ndash;', '-', $val); // Fix strange encoding issue
                         
                             $outdata[$key] = $val;
                         }
