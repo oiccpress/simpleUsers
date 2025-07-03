@@ -12,17 +12,10 @@ namespace APP\plugins\importexport\simpleusers;
 
 use APP\core\Application;
 use APP\facades\Repo;
-use APP\plugins\importexport\simpleXML\elements\InPressElement;
-use APP\plugins\importexport\simpleXML\elements\IssueElement;
 use APP\template\TemplateManager;
-use Illuminate\Support\Facades\DB;
 use PKP\core\JSONMessage;
 use PKP\file\TemporaryFileManager;
-use PKP\plugins\GenericPlugin;
- use PKP\plugins\Hook;
-use PKP\plugins\importexport\native\PKPNativeImportExportCLIDeployment;
 use PKP\plugins\ImportExportPlugin;
-use PKP\plugins\PluginRegistry;
 use PKP\security\Validation;
 use PKP\userGroup\UserGroup;
 
@@ -177,11 +170,11 @@ use PKP\userGroup\UserGroup;
                     }
                     switch($header) {
                         case 'user_group_ref':
-                            $userGroups = Repo::userGroup()->getCollector()
-                                ->filterByContextIds([$context->getId()])
-                                ->getMany();
+                            $userGroups = UserGroup::query()
+                                ->withContextIds([$context->getId()])
+                                ->get();
                             foreach ($userGroups as $userGroup) {
-                                $xml['options']['raw:' . $userGroup->getName('en')] = 'Group: ' . $userGroup->getName('en');
+                                $xml['options']['raw:' . $userGroup->getLocalizedData('name')] = 'Group: ' . $userGroup->getLocalizedData('name');
                             }
                             break;
                     }
