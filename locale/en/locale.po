@@ -1,5 +1,8 @@
-msgid "plugins.importexport.simpleusers.import.instructions"
+msgid ""
+msgstr ""
+
+msgid "plugins.importexport.simpleUsers.import.instructions"
 msgstr "Import CSV"
 
-msgid "plugins.importexport.simpleusers.next"
+msgid "plugins.importexport.simpleUsers.next"
 msgstr "Next"

@@ -46,13 +46,15 @@
 				{* Container for uploaded file *}
 				<input type="hidden" name="temporaryFileId" id="temporaryFileId" value="" />
 
+				<p>{translate key="plugins.importexport.simpleUsers.import.instructions"}</p>
+
 				{fbvFormArea id="file"}
-					{fbvFormSection title="plugins.importexport.simpleusers.import.instructions"}
+					{fbvFormSection title="common.file"}
 						{include file="controllers/fileUploadContainer.tpl" id="plupload"}
 					{/fbvFormSection}
 				{/fbvFormArea}
 
-				{fbvFormButtons submitText="plugins.importexport.simpleusers.next" hideCancel="true"}
+				{fbvFormButtons submitText="plugins.importexport.simpleUsers.next" hideCancel="true"}
 			{/fbvFormArea}
 			<p><span class="formRequired">{translate key="common.requiredField"}</span></p>
 		</form>

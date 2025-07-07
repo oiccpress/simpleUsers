@@ -70,6 +70,44 @@ use PKP\userGroup\UserGroup;
         return 'Simple user import [InvisibleDragon]';
     }
 
+    public function esc_xml($input)
+    {
+        // Modified from wordpress
+        $safe_text = $input; // todo: at some point check utf8
+
+        $cdata_regex = '\<\!\[CDATA\[.*?\]\]\>';
+        $regex       = <<<EOF
+/
+	(?=.*?{$cdata_regex})                 # lookahead that will match anything followed by a CDATA Section
+	(?<non_cdata_followed_by_cdata>(.*?)) # the "anything" matched by the lookahead
+	(?<cdata>({$cdata_regex}))            # the CDATA Section matched by the lookahead
+
+|	                                      # alternative
+
+	(?<non_cdata>(.*))                    # non-CDATA Section
+/sx
+EOF;
+
+        $safe_text = (string) preg_replace_callback(
+            $regex,
+            static function ( $matches ) {
+                if ( ! isset( $matches[0] ) ) {
+                    return '';
+                }
+
+                if ( isset( $matches['non_cdata'] ) ) {
+                    // escape HTML entities in the non-CDATA Section.
+                    return htmlspecialchars( $matches['non_cdata'], ENT_XML1 );
+                }
+
+                // Return the CDATA Section unchanged, escape HTML entities in the rest.
+                return htmlspecialchars( $matches['non_cdata_followed_by_cdata'], ENT_XML1 ) . $matches['cdata'];
+            },
+            $safe_text
+        );
+        return $safe_text;
+    }
+
     public function display($args, $request)
     {
 
@@ -231,7 +269,8 @@ use PKP\userGroup\UserGroup;
                                     break;
                             }
                             $val = str_replace('&ndash;', '-', $val); // Fix strange encoding issue
-                        
+                            $val = html_entity_decode($val);
+                            
                             $outdata[$key] = $val;
                         }
 
@@ -259,6 +298,7 @@ use PKP\userGroup\UserGroup;
                             $value = Validation::encryptCredentials('', $value);
                             echo '<password is_disabled="false" must_change="false" encryption="sha1"><value>' . $value . '</value></password>';
                         } else {
+                            $value = $this->esc_xml($value);
                             if(in_array('locale', $parts)) {
                                 echo '<' . $field . ' locale="en">' . $value . '</' . $field . '>' . PHP_EOL;
                             } else {

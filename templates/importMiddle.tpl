@@ -23,5 +23,5 @@
 
     {/fbvFormArea}
 
-    {fbvFormButtons submitText="plugins.importexport.simpleusers.next" hideCancel="true"}
+    {fbvFormButtons submitText="plugins.importexport.simpleUsers.next" hideCancel="true"}
 </form>
