@@ -29,7 +29,7 @@ use PKP\userGroup\UserGroup;
     static $log = [];
 
     static $fields = [
-        'givenname:required:locale', 'familyname:locale', 'affiliation:locale', 'country',
+        'givenname:required:locale', 'familyname:locale', 'affiliation', 'country',
         'email:required', 'url', 'orcid', 'biography',
         'username:required', 'gossip', 'password:required', 'date_registered', 'date_last_login', 'date_last_email', 'date_validated',
         'inline_help', 'auth_string', 'phone', 'mailing_address', 'billing_address', 'locales', 'disabled_reason',
@@ -294,16 +294,24 @@ EOF;
                         }
                         if(!$value) continue;
 
-                        if($field == 'password') {
-                            $value = Validation::encryptCredentials('', $value);
-                            echo '<password is_disabled="false" must_change="false" encryption="sha1"><value>' . $value . '</value></password>';
-                        } else {
-                            $value = $this->esc_xml($value);
-                            if(in_array('locale', $parts)) {
-                                echo '<' . $field . ' locale="en">' . $value . '</' . $field . '>' . PHP_EOL;
-                            } else {
-                                echo '<' . $field . '>' . $value . '</' . $field . '>' . PHP_EOL;
-                            }
+                        switch($field){
+                            case 'user_group_ref':
+                                echo '<user_user_group><user_group_ref>' . $this->esc_xml($value) . '</user_group_ref><masthead>false</masthead></user_user_group>';
+                                break;
+                            case 'affiliation':
+                                echo '<affiliation><name locale="en">' . $this->esc_xml($value) . '</name></affiliation>';
+                                break;
+                            case 'password':
+                                $value = Validation::encryptCredentials('', $value);
+                                echo '<password is_disabled="false" must_change="false" encryption="sha1"><value>' . $value . '</value></password>';
+                                break;
+                            default:
+                                $value = $this->esc_xml($value);
+                                if(in_array('locale', $parts)) {
+                                    echo '<' . $field . ' locale="en">' . $value . '</' . $field . '>' . PHP_EOL;
+                                } else {
+                                    echo '<' . $field . '>' . $value . '</' . $field . '>' . PHP_EOL;
+                                }
                         }
                     }
 
