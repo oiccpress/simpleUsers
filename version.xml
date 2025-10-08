@@ -9,10 +9,10 @@
   * Plugin version information.
   -->
 <version>
-	<application>simpleusers</application>
+	<application>simpleUsers</application>
 	<type>plugins.importexport</type>
-	<release>1</release>
-	<date>2025-01-12</date>
+	<release>2</release>
+	<date>2025-10-08</date>
 	<lazy-load>1</lazy-load>
 	<class>SimpleUsersPlugin</class>
 </version>

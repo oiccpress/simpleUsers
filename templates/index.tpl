@@ -24,7 +24,18 @@
 <div id="importExportTabs">
 	<ul>
 		<li><a href="#import-tab">{translate key="plugins.importexport.native.import"}</a></li>
+		<li><a href="#export-tab">{translate key="plugins.importexport.simpleUsers.export"}</a></li>
 	</ul>
+	<div id="export-tab">
+		<form id="exportForm" class="pkp_form" action="{plugin_url path="export"}" method="post" target="_blank">
+			{csrf}
+			{fbvFormArea id="exportForm"}
+				<p>{translate key="plugins.importexport.simpleUsers.export.instructions"}</p>
+
+				{fbvFormButtons submitText="plugins.importexport.simpleUsers.next" hideCancel="true"}
+			{/fbvFormArea}
+		</form>
+	</div>
 	<div id="import-tab">
 		<script type="text/javascript">
 			$(function() {ldelim}

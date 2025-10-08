@@ -1,8 +1,17 @@
-msgid ""
-msgstr ""
+msgid "plugins.importexport.simpleUsers.pluginName"
+msgstr "Simple User Import/Export"
+
+msgid "plugins.importexport.simpleUsers.pluginDescription"
+msgstr "[InvisibleDragon] Import and Export users using CSV files"
 
 msgid "plugins.importexport.simpleUsers.import.instructions"
-msgstr "Import CSV"
+msgstr "Select a CSV to import, and upon successful import a CSV will be created which can then be imported using the standard OJS Users importer"
 
 msgid "plugins.importexport.simpleUsers.next"
 msgstr "Next"
+
+msgid "plugins.importexport.simpleUsers.export"
+msgstr "Export"
+
+msgid "plugins.importexport.simpleUsers.export.instructions"
+msgstr "This will export a CSV for all users on this journal"

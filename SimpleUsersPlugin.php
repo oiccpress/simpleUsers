@@ -8,15 +8,17 @@
  *
  */
 
-namespace APP\plugins\importexport\simpleusers;
+namespace APP\plugins\importexport\simpleUsers;
 
 use APP\core\Application;
 use APP\facades\Repo;
 use APP\template\TemplateManager;
+use Locale;
 use PKP\core\JSONMessage;
 use PKP\file\TemporaryFileManager;
 use PKP\plugins\ImportExportPlugin;
 use PKP\security\Validation;
+use PKP\userGroup\relationships\UserUserGroup;
 use PKP\userGroup\UserGroup;
 
  class SimpleUsersPlugin extends ImportExportPlugin {
@@ -40,6 +42,13 @@ use PKP\userGroup\UserGroup;
         return 'SimpleUsersPlugin';
     }
 
+    public function register($category, $path, $mainContextId = null): bool
+    {
+        $success = parent::register($category, $path);
+        $this->addLocaleData();
+        return $success;
+    }
+
     public static function log($items) {
         if(static::$ajax) {
             static::$log[] = $items;
@@ -56,7 +65,7 @@ use PKP\userGroup\UserGroup;
      */
     public function getDisplayName()
     {
-        return 'Simple Users';
+        return __('plugins.importexport.simpleUsers.pluginName');
     }
 
     /**
@@ -67,7 +76,7 @@ use PKP\userGroup\UserGroup;
      */
     public function getDescription()
     {
-        return 'Simple user import [InvisibleDragon]';
+        return __('plugins.importexport.simpleUsers.pluginDescription');
     }
 
     public function esc_xml($input)
@@ -151,6 +160,9 @@ EOF;
                 $templateMgr->display($this->getTemplateResource('index.tpl'));
 
                 $this->isResultManaged = true;
+                break;
+            case 'export':
+                $this->export($request);
                 break;
             case 'uploadImportXML':
                 $temporaryFileManager = new TemporaryFileManager();
@@ -342,6 +354,52 @@ EOF;
             'scriptName' => $scriptName,
             'pluginName' => $this->getName()
         ]) . "\n";
+    }
+
+    public function export($request) {
+
+        header("Content-Type: text/plain");
+        header("Content-Disposition: attachment; filename=user-export-" . date("Y-m-d") . ".csv");
+
+        $headers = [
+            'givenname',
+            'familyname',
+            'email',
+            'username',
+            'user_group_ref',
+            'affiliation_name',
+            'orcid'
+        ];
+        $fout = fopen('php://output', 'w');
+        fputcsv($fout, $headers);
+
+        $context = $request->getContext();
+        /** @var \PKP\user\Repository */
+        $userRepo = Repo::user();
+        $users = $userRepo->getCollector()->filterByContextIds([ $context->getId() ])->getMany();
+
+        $locale = Locale::getDefault();
+
+        foreach($users as $user) {
+            $groups = UserUserGroup::withContextId($context->getId())
+                ->withUserId($user->getId())
+                ->get();
+            $group_ref = [];
+            foreach($groups as $group) {
+                $group_ref[] = $group->userGroup->getLocalizedData('name');
+            }
+            $data = [
+                $user->getGivenName($locale),
+                $user->getFamilyName($locale),
+                $user->getEmail(),
+                $user->getUsername(),
+                implode(";", $group_ref),
+                $user->getLocalizedAffiliation($locale),
+                $user->getOrcid(),
+            ];
+            fputcsv($fout, $data);
+        }
+
     }
 
  }

@@ -1,9 +1,11 @@
-# Simple users import for OJS
+# Simple users import/export for OJS
 
 This allows for a CSV file to be input, and for the columns to be mapped to various OJS User properties. It then produces an XML
 you can use the built-in OJS User import tool in order to action.
 
 Note: you need to patch pkp-users.xsd to say `<element ref="pkp:user_groups" minOccurs="0" maxOccurs="1" />` otherwise this doesn't work
+
+You can also generate a CSV file with all of the users of the selected journal.
 
 ## OICC Press in collaboration with Invisible Dragon
 
