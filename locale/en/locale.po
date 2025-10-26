@@ -15,3 +15,6 @@ msgstr "Export"
 
 msgid "plugins.importexport.simpleUsers.export.instructions"
 msgstr "This will export a CSV for all users on this journal"
+
+msgid "plugins.importexport.simpleUsers.exportAuthors.instructions"
+msgstr "This will export a CSV for all authors on this journal"

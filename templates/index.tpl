@@ -34,6 +34,15 @@
 
 				{fbvFormButtons submitText="plugins.importexport.simpleUsers.next" hideCancel="true"}
 			{/fbvFormArea}
+			<hr/><br/>
+		</form>
+		<form id="exportAuthorsForm" class="pkp_form" action="{plugin_url path="exportAuthors"}" method="post" target="_blank">
+			{csrf}
+			{fbvFormArea id="exportForm"}
+				<p>{translate key="plugins.importexport.simpleUsers.exportAuthors.instructions"}</p>
+
+				{fbvFormButtons submitText="plugins.importexport.simpleUsers.next" hideCancel="true"}
+			{/fbvFormArea}
 		</form>
 	</div>
 	<div id="import-tab">

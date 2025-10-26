@@ -161,6 +161,9 @@ EOF;
 
                 $this->isResultManaged = true;
                 break;
+            case 'exportAuthors':
+                $this->exportAuthors($request);
+                break;
             case 'export':
                 $this->export($request);
                 break;
@@ -354,6 +357,62 @@ EOF;
             'scriptName' => $scriptName,
             'pluginName' => $this->getName()
         ]) . "\n";
+    }
+
+    public function exportAuthors($request) {
+
+        header("Content-Type: text/plain");
+        header("Content-Disposition: attachment; filename=author-export-" . date("Y-m-d") . ".csv");
+
+        $headers = [
+            'givenname',
+            'familyname',
+            'email',
+            'affiliation_name',
+            'orcid'
+        ];
+        $fout = fopen('php://output', 'w');
+        fputcsv($fout, $headers);
+
+        $context = $request->getContext();
+        /** @var \PKP\author\Repository */
+        $authorRepo = Repo::author();
+        $authors = $authorRepo->getCollector()->filterByContextIds([ $context->getId() ])->getMany();
+
+        $locale = Locale::getDefault();
+
+        $already_gone = [];
+
+        foreach($authors as $author) {
+
+            // Don't repeat authors
+            $identifier = $author->getOrcid() ?: $author->getEmail();
+            if(in_array($identifier, $already_gone)) {
+                continue;
+            }
+            $already_gone[] = $identifier;
+
+            // Sort out affiliations
+            $authorAffiliations = $author->getAffiliations();
+            $group_ref = [];
+            foreach($authorAffiliations as $affItem) {
+				$affiliationRaw = $affItem->getLocalizedName();
+				$bits = explode(" AND ", $affiliationRaw); // Split old style up with this
+				foreach($bits as $affiliation) {
+                    $group_ref[] = $affiliation;
+                }
+            }
+            // Prepare for output
+            $data = [
+                $author->getGivenName($locale) ?: $author->getGivenName('en'),
+                $author->getFamilyName($locale) ?: $author->getFamilyName('en'),
+                $author->getEmail(),
+                implode(";", $group_ref),
+                $author->getOrcid(),
+            ];
+            fputcsv($fout, $data);
+        }
+
     }
 
     public function export($request) {

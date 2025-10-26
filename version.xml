@@ -11,8 +11,8 @@
 <version>
 	<application>simpleUsers</application>
 	<type>plugins.importexport</type>
-	<release>2</release>
-	<date>2025-10-08</date>
+	<release>2.1</release>
+	<date>2025-10-26</date>
 	<lazy-load>1</lazy-load>
 	<class>SimpleUsersPlugin</class>
 </version>
