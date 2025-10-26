@@ -389,8 +389,8 @@ EOF;
                 $group_ref[] = $group->userGroup->getLocalizedData('name');
             }
             $data = [
-                $user->getGivenName($locale),
-                $user->getFamilyName($locale),
+                $user->getGivenName($locale) ?: $user->getGivenName('en'),
+                $user->getFamilyName($locale) ?: $user->getFamilyName('en'),
                 $user->getEmail(),
                 $user->getUsername(),
                 implode(";", $group_ref),
